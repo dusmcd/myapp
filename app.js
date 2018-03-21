@@ -4,14 +4,19 @@ const express = require('express'),
       NewModel = require('./models/order');
 
 // create new customer model
-// const Transaction = new NewModel({
-//     transactionId: 'int',
-//     payment: 'varchar(255)',
-//     checkNum: 'varchar(255)'
-// }, 'Customer');
+const Pizza = new NewModel({
+    transactionId: 'int',
+    payment: 'varchar(255)',
+    checkNum: 'varchar(255)'
+}, 'Pizza');
 
 
-// Transaction.save();
+Pizza.new({
+    transactionId: 5,
+    payment: 'check',
+    checkNum: '9'
+});
+// Pizza.save();
 
 
 
