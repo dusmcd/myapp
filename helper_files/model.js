@@ -7,38 +7,40 @@ let connection = mysql.createConnection({
 });
 
 // constructor that can create a new table in mySQL DB
-/* Need to attach the Id property to the new created model object.
-Probably can attach manually since all models will have the primary key.
-Can assign the AUTO_INCREMENT ID value to the object when query is run
-*/
 
-function NewModel(obj, table) {
+function Model(obj, table) {
     let _this = this;
     this.tableName = table + 's'
     let queryString = 'CREATE TABLE ' + this.tableName + '(ID int NOT NULL AUTO_INCREMENT, ';
     
-    // attach fields as properties to NewModel object, and
+    // attach fields as properties to Model object, and
     // create queryString to create table in DB
     Object.keys(obj).forEach(function(key) {
         _this[key] = {type: obj[key], data: []};
         queryString += key + ' ' + _this[key].type + ', ';
     });
+
     queryString += 'PRIMARY KEY (ID))';
+    this.ID = {type: 'int', data: []};
     this.queryString = queryString;
     
 }
 
-NewModel.prototype.save = function() {
+Model.prototype.save = function(addId) {
+    // if (addId) {
+    //     this.queryString = 'SELECT ID FROM ' + this.tableName;
+    // }
     connection.query(this.queryString, function(err, results) {
         if (err) {
             throw err;
         }
         console.log('Query executed successfully');
+        // callback(results);
     });
-    connection.end();
+    // connection.end();
 }
 
-NewModel.prototype.new = function(obj, callback) {
+Model.prototype.new = function(obj, callback) {
     let queryString = 'INSERT INTO ' + this.tableName + '(';
     let values = '';
     let fields = Object.keys(obj).join(', ');
@@ -56,6 +58,26 @@ NewModel.prototype.new = function(obj, callback) {
     // console.log(this.queryString);
 }
 
+Model.prototype.find = function(fields, conditions, callback) {
+    let fieldString = fields.join(', ');
+    let queryString = 'SELECT ' + fieldString + ' FROM ' + this.tableName + ' WHERE ';
+
+    Object.keys(conditions).forEach(function(key, i, arr) {
+        let value = typeof conditions[key] === 'string' ? '"' + conditions[key] + '"' : conditions[key];
+        queryString += key + ' = ' + value;
+        if (i !== arr.length - 1) {
+            queryString += 'AND ';
+        }
+    });
+
+    connection.query(queryString, function(err, results) {
+        if (err) {
+            callback(err, null);
+        }
+        callback(false, results);
+    });
+    // connection.end();
+}
 
 
-module.exports = NewModel;
+module.exports = Model;
