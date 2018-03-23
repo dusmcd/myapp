@@ -34,8 +34,6 @@ Model.prototype.save = function(addId) {
         if (err) {
             throw err;
         }
-        console.log('Query executed successfully');
-        // callback(results);
     });
     // connection.end();
 }
@@ -55,7 +53,6 @@ Model.prototype.new = function(obj, callback) {
 
     queryString += fields + ') VALUES (' + values + ')';
     this.queryString = queryString;
-    // console.log(this.queryString);
 }
 
 Model.prototype.find = function(fields, conditions, callback) {
