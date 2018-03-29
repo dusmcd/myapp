@@ -36,10 +36,10 @@ app.use(passport.session());
 
 // connect to db
 
-// const promise = mongoose.connect(process.env.DATABASEURL, {
-//     useMongoClient: true
-// });
-// promise.then();
+const promise = mongoose.connect('mongodb://dustin:nitsud181@ds127899.mlab.com:27899/livemusic', {
+    useMongoClient: true
+});
+promise.then();
 
 // passport config
 

@@ -5,8 +5,7 @@ const express = require('express'),
 // routes go here
 
 router.get('/', function(req, res) {
-    res.send('This is the landing page');
-    // res.render('landing');
+    res.render('landing');
 });
 
 
